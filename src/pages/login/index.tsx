@@ -23,6 +23,7 @@ export default function login () {
 
           />
           <PasswordInput
+            withAsterisk
             label="Password"
             placeholder="Enter Password"
           />    
