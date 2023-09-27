@@ -1,12 +1,6 @@
-import { Button } from '@mantine/core'
-import React from 'react'
+import dynamic from 'next/dynamic'
 
+const Map = dynamic(() => import('../../components/map'), { ssr: false })
 export default function map() {
-  return (
-    <div>
-      <Button variant="filled" color="red">
-        Report Event
-      </Button>
-    </div>
-  )
+  return <Map />
 }

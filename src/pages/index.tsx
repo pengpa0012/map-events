@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <main>
-      <h1>HOMEPAGE</h1>
+      <h1>FEED</h1>
     </main>
   )
 }
