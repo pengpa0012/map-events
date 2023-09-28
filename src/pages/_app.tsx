@@ -22,7 +22,6 @@ export default function App({ Component, pageProps }: AppProps) {
               breakpoint: 'sm',
               collapsed: { mobile: !opened },
             }}
-            padding="md"
           >
             <AppShell.Navbar
               p="md"
@@ -44,6 +43,11 @@ export default function App({ Component, pageProps }: AppProps) {
                   label="Profile"
                   className="text-center"
                   onClick={() => router.push('/profile')}
+                />
+                <NavLink
+                  label="Report Event"
+                  className="text-center"
+                  onClick={() => router.push('/report')}
                 />
                 <NavLink
                   label="Logout"
