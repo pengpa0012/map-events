@@ -21,6 +21,7 @@ export default function map({ report }: { report?: Boolean }) {
     const [markerPosition, setMarkerPosition] = useState<LatLng>()
     const map = useMapEvents({
       click(e) {
+        map.setView(e.latlng)
         setMarkerPosition(e.latlng)
       },
     })

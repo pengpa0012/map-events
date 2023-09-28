@@ -27,7 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
               p="md"
               className="flex flex-col justify-stretch items-center h-full"
             >
-              <h1 className="text-2xl">Header</h1>
+              <h1 className="text-2xl">Map Events</h1>
               <div className="flex flex-col gap-5 w-full my-20">
                 <NavLink
                   label="Feed"

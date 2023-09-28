@@ -1,4 +1,13 @@
-import { Input, Textarea, Group, Text, rem, Button, Image } from '@mantine/core'
+import {
+  Input,
+  Textarea,
+  Group,
+  Text,
+  rem,
+  Button,
+  Image,
+  Container,
+} from '@mantine/core'
 import dynamic from 'next/dynamic'
 import React, { useState } from 'react'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
@@ -9,7 +18,7 @@ export default function report() {
   const [previewImages, setPreviewImages] = useState<string[]>([])
 
   return (
-    <div className="pb-20">
+    <Container className="py-20 px-4" size="xl">
       <Map report />
       <Dropzone
         multiple
@@ -20,7 +29,7 @@ export default function report() {
         }}
         maxSize={3 * 1024 ** 2}
         accept={IMAGE_MIME_TYPE}
-        className="border border-gray-100"
+        className="mt-10"
       >
         <Group
           justify="center"
@@ -28,13 +37,13 @@ export default function report() {
           mih={220}
           style={{ pointerEvents: 'none' }}
         >
-          <div>
+          <div className="w-full">
             {images.length <= 0 ? (
-              <Text size="xl" inline>
+              <Text size="xl" className="text-center" inline>
                 Drag images here or click to select files
               </Text>
             ) : (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap justify-start gap-2">
                 {previewImages.map((img, i) => (
                   <Image
                     src={img}
@@ -47,7 +56,7 @@ export default function report() {
           </div>
         </Group>
       </Dropzone>
-      <div className="p-2 flex flex-col gap-2">
+      <div className="p-2 flex flex-col gap-5">
         <Input placeholder="Name of event" />
         <Textarea
           placeholder="Event description"
@@ -56,6 +65,6 @@ export default function report() {
         />
         <Button variant="filled">Report Event</Button>
       </div>
-    </div>
+    </Container>
   )
 }
