@@ -11,11 +11,6 @@ export default function Form() {
   const [images, setImages] = useState<File[]>([])
   const [selectedPosition, _] = useLocalStorage<LatLng>({ key: 'position' })
 
-  const onSubmit = (values: any) => {
-    if (images.length == 0) return console.log('Image Required')
-    console.log(values)
-  }
-
   const form = useForm({
     initialValues: {
       title: '',
@@ -31,6 +26,13 @@ export default function Form() {
     },
   })
 
+  const onSubmit = (values: any) => {
+    if (images.length == 0 || selectedPosition?.lat == undefined) {
+      return console.log('Image and Position Required')
+    }
+    console.log(values, selectedPosition)
+  }
+
   const onRemoveImage = (name: string) => {
     const copyImages = [...images]
     const findImage = copyImages.findIndex((img) => img.name == name)
@@ -42,10 +44,9 @@ export default function Form() {
     <>
       <div className="flex flex-wrap justify-center gap-2 my-10">
         {images.map((img, i) => {
-          console.log(img)
           const blob = window.URL.createObjectURL(img)
           return (
-            <div className="bg-gray-100 rounded-md relative">
+            <div className="bg-gray-100 rounded-md relative" key={`img-${i}`}>
               <IconTrash
                 strokeWidth={2}
                 color={'white'}

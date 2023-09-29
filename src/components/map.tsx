@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   MapContainer,
   TileLayer,
@@ -22,6 +22,11 @@ export default function map({ report }: { report?: Boolean }) {
     const [markerPosition, setMarkerPosition] = useLocalStorage<LatLng>({
       key: 'position',
     })
+
+    useEffect(() => {
+      setMarkerPosition({} as LatLng)
+    }, [])
+
     const map = useMapEvents({
       click(e) {
         map.setView(e.latlng)
