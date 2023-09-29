@@ -12,22 +12,18 @@ import 'leaflet-defaulticon-compatibility'
 import { Button } from '@mantine/core'
 import { LatLng, LatLngTuple } from 'leaflet'
 import { useRouter } from 'next/router'
+import { useLocalStorage } from '@mantine/hooks'
 
-export default function map({
-  report,
-  setSelectedPosition,
-}: {
-  report?: Boolean
-  setSelectedPosition?: React.Dispatch<React.SetStateAction<LatLng | undefined>>
-}) {
+export default function map({ report }: { report?: Boolean }) {
   const position = [14.599, 120.98] as LatLngTuple
   const router = useRouter()
 
   const LocationMarker = () => {
-    const [markerPosition, setMarkerPosition] = useState<LatLng>()
+    const [markerPosition, setMarkerPosition] = useLocalStorage<LatLng>({
+      key: 'position',
+    })
     const map = useMapEvents({
       click(e) {
-        // setSelectedPosition(e.latlng)
         map.setView(e.latlng)
         setMarkerPosition(e.latlng)
       },

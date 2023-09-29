@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app'
 import { MantineProvider, createTheme, AppShell, NavLink } from '@mantine/core'
 import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
+import '@mantine/carousel/styles.css'
 import { useDisclosure } from '@mantine/hooks'
 import { useRouter } from 'next/router'
 
@@ -33,21 +34,25 @@ export default function App({ Component, pageProps }: AppProps) {
                 <NavLink
                   label="Feed"
                   className="text-center"
+                  active={router.pathname == '/'}
                   onClick={() => router.push('/')}
                 />
                 <NavLink
                   label="Map"
                   className="text-center"
+                  active={router.pathname == '/map'}
                   onClick={() => router.push('/map')}
                 />
                 <NavLink
                   label="Profile"
                   className="text-center"
+                  active={router.pathname == '/profile'}
                   onClick={() => router.push('/profile')}
                 />
                 <NavLink
                   label="Report Event"
                   className="text-center"
+                  active={router.pathname == '/report'}
                   onClick={() => router.push('/report')}
                 />
                 <NavLink
