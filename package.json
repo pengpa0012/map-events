@@ -18,6 +18,7 @@
     "@mantine/modals": "^7.0.0",
     "@mantine/notifications": "^7.0.0",
     "@react-leaflet/universal-leaflet": "^1.0.1",
+    "@tabler/icons-react": "^2.37.0",
     "@types/node": "20.6.5",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",

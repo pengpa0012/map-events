@@ -5,14 +5,14 @@ import { useLocalStorage } from '@mantine/hooks'
 import React, { useState } from 'react'
 import { LatLng } from 'leaflet'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
+import { IconTrash } from '@tabler/icons-react'
 
 export default function Form() {
   const [images, setImages] = useState<File[]>([])
-  const [previewImages, setPreviewImages] = useState<string[]>([])
   const [selectedPosition, _] = useLocalStorage<LatLng>({ key: 'position' })
 
   const onSubmit = (values: any) => {
-    if (previewImages.length == 0) return console.log('Image Required')
+    if (images.length == 0) return console.log('Image Required')
     console.log(values)
   }
 
@@ -30,22 +30,40 @@ export default function Form() {
       description: (value) => (!value ? 'Description Required' : null),
     },
   })
+
+  const onRemoveImage = (name: string) => {
+    const copyImages = [...images]
+    const findImage = copyImages.findIndex((img) => img.name == name)
+    copyImages.splice(findImage, 1)
+    setImages(copyImages)
+  }
+
   return (
     <>
       <div className="flex flex-wrap justify-center gap-2 my-10">
-        {previewImages.map((img, i) => (
-          <Image
-            src={img}
-            key={`img-${i}`}
-            className="w-[225px] h-[225px] rounded-md cursor-pointer"
-            fit="contain"
-          />
-        ))}
+        {images.map((img, i) => {
+          console.log(img)
+          const blob = window.URL.createObjectURL(img)
+          return (
+            <div className="bg-gray-100 rounded-md relative">
+              <IconTrash
+                strokeWidth={2}
+                color={'white'}
+                onClick={() => onRemoveImage(img.name)}
+                className="cursor-pointer bg-red-600 hover:bg-red-700 rounded-full w-[25px] h-[25px] p-1 absolute -top-1 -right-1"
+              />
+              <Image
+                src={blob}
+                key={`img-${i}`}
+                className="w-[225px] h-[225px] rounded-md cursor-pointer"
+                fit="contain"
+              />
+            </div>
+          )
+        })}
         <Dropzone
           multiple
           onDrop={(files) => {
-            const blob = window.URL.createObjectURL(files[0])
-            setPreviewImages((prev) => [...prev, blob])
             setImages((prev) => [...prev, files[0]])
           }}
           maxSize={3 * 1024 ** 2}
