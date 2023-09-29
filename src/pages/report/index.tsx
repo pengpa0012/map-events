@@ -11,15 +11,21 @@ import {
 import dynamic from 'next/dynamic'
 import React, { useState } from 'react'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
+import { LatLng } from 'leaflet'
+import { DatePickerInput, TimeInput } from '@mantine/dates'
+
 const Map = dynamic(() => import('../../components/map'), { ssr: false })
 
 export default function report() {
   const [images, setImages] = useState<File[]>([])
   const [previewImages, setPreviewImages] = useState<string[]>([])
+  const [selectedPosition, setSelectedPosition] = useState<LatLng>()
+
+  console.log(selectedPosition)
 
   return (
-    <Container className="py-20 px-4" size="xl">
-      <Map report />
+    <Container className="py-20 px-4" size={1440}>
+      <Map report setSelectedPosition={setSelectedPosition} />
       <Dropzone
         multiple
         onDrop={(files) => {
@@ -43,12 +49,13 @@ export default function report() {
                 Drag images here or click to select files
               </Text>
             ) : (
-              <div className="flex flex-wrap justify-start gap-2">
+              <div className="flex flex-wrap justify-center gap-2">
                 {previewImages.map((img, i) => (
                   <Image
                     src={img}
                     key={`img-${i}`}
                     className="w-[200px] h-[200px]"
+                    fit="cover"
                   />
                 ))}
               </div>
@@ -57,12 +64,18 @@ export default function report() {
         </Group>
       </Dropzone>
       <div className="p-2 flex flex-col gap-5">
-        <Input placeholder="Name of event" />
+        <Input.Wrapper label="Title">
+          <Input placeholder="Enter title" />
+        </Input.Wrapper>
         <Textarea
-          placeholder="Event description"
-          size="md"
+          placeholder="Enter description"
+          label="Description"
           styles={{ input: { height: 150 } }}
         />
+        <Group grow>
+          <DatePickerInput label="Date" placeholder="Pick date" />
+          <TimeInput label="Time" />
+        </Group>
         <Button variant="filled">Report Event</Button>
       </div>
     </Container>

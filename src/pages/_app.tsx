@@ -2,6 +2,7 @@ import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { MantineProvider, createTheme, AppShell, NavLink } from '@mantine/core'
 import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
 import { useDisclosure } from '@mantine/hooks'
 import { useRouter } from 'next/router'
 

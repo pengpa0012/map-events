@@ -13,7 +13,13 @@ import { Button } from '@mantine/core'
 import { LatLng, LatLngTuple } from 'leaflet'
 import { useRouter } from 'next/router'
 
-export default function map({ report }: { report?: Boolean }) {
+export default function map({
+  report,
+  setSelectedPosition,
+}: {
+  report?: Boolean
+  setSelectedPosition?: React.Dispatch<React.SetStateAction<LatLng | undefined>>
+}) {
   const position = [14.599, 120.98] as LatLngTuple
   const router = useRouter()
 
@@ -21,6 +27,7 @@ export default function map({ report }: { report?: Boolean }) {
     const [markerPosition, setMarkerPosition] = useState<LatLng>()
     const map = useMapEvents({
       click(e) {
+        // setSelectedPosition(e.latlng)
         map.setView(e.latlng)
         setMarkerPosition(e.latlng)
       },
@@ -50,7 +57,11 @@ export default function map({ report }: { report?: Boolean }) {
               src="https://via.placeholder.com/100x100"
               className="w-full my-2"
             />
-            <Button variant="filled" onClick={() => router.push('/map/321')}>
+            <Button
+              variant="filled"
+              onClick={() => router.push('/map/321')}
+              className="w-full"
+            >
               Open
             </Button>
           </Popup>
