@@ -1,30 +1,30 @@
 import { Carousel } from '@mantine/carousel'
-import { Container, Image } from '@mantine/core'
+import { Button, Container, Image, Input } from '@mantine/core'
 import React from 'react'
 
 export default function profile() {
   return (
-    <Container fluid p={0}>
-      <Carousel withIndicators height={500} loop withControls={false}>
+    <Container className="pt-10 pb-20">
+      <Carousel withIndicators height={500} loop withControls>
         <Carousel.Slide>
           <Image
             src="https://via.placeholder.com/1280x500"
-            className="w-full"
-            fit="contain"
+            className="w-full h-full rounded-md"
+            fit="cover"
           />
         </Carousel.Slide>
         <Carousel.Slide>
           <Image
             src="https://via.placeholder.com/1280x500"
-            className="w-full"
-            fit="contain"
+            className="w-full h-full rounded-md"
+            fit="cover"
           />
         </Carousel.Slide>
         <Carousel.Slide>
           <Image
             src="https://via.placeholder.com/1280x500"
-            className="w-full"
-            fit="contain"
+            className="w-full h-full rounded-md"
+            fit="cover"
           />
         </Carousel.Slide>
       </Carousel>
@@ -36,7 +36,7 @@ export default function profile() {
             <p>Time</p>
           </div>
         </div>
-        <p className="text-lg py-2 text-gray-600">
+        <p className="text-lg py-2 text-gray-600 text-justify">
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio
           corrupti minima adipisci et aliquam sit similique vero. Nulla ut
           aliquid odio hic quaerat ratione aperiam saepe, magnam excepturi cum.
@@ -44,6 +44,28 @@ export default function profile() {
           voluptates assumenda voluptas natus fugiat omnis quo pariatur ab
           quidem minus? Esse, perspiciatis.
         </p>
+        <div className="mt-10">
+          <h3 className="mb-4 text-">Comments</h3>
+          <div className="flex flex-col gap-5">
+            <div className="p-2 rounded-md flex items-center gap-2">
+              <Image
+                src="https://via.placeholder.com/50x50"
+                className="rounded-full w-[50px]"
+              />
+              <p className="text-sm text-gray-800">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Deleniti, provident asperiores! Blanditiis, earum quisquam
+                perspiciatis cupiditate fuga facere ratione voluptatum!
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Input className="w-full" placeholder="Enter Comment..." />
+              <Button size="sm" variant="filled">
+                Comment
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </Container>
   )
