@@ -1,5 +1,4 @@
 import {
-  Card,
   Container,
   Group,
   Image,
@@ -8,8 +7,11 @@ import {
   Button,
   Tabs,
 } from '@mantine/core'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+
+const Card = dynamic(() => import('../components/Card'), { ssr: false })
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(true)
@@ -22,40 +24,7 @@ export default function Home() {
   const Feed = ({ array }: { array: any[] }) => (
     <Group wrap="wrap" gap={30}>
       {array.map((el, i) => (
-        <Card
-          shadow="sm"
-          padding="lg"
-          radius="md"
-          withBorder
-          key={`card-${i}`}
-          className="max-w-[329px]"
-        >
-          <Card.Section>
-            <Image
-              src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-              height={160}
-              alt="Norway"
-            />
-          </Card.Section>
-          <Group justify="space-between" mt="md" mb="xs">
-            <Text fw={500}>Title</Text>
-            <Text fw={500}>Date</Text>
-          </Group>
-          <Text size="sm" c="dimmed" className="text-justify">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
-            possimus quo odit optio magnam assumenda provident sapiente. Hic,
-            animi ducimus.
-          </Text>
-          <Button
-            variant="filled"
-            fullWidth
-            mt="md"
-            radius="md"
-            onClick={() => router.push('/map/123')}
-          >
-            View
-          </Button>
-        </Card>
+        <Card key={`card-${i}`} />
       ))}
     </Group>
   )

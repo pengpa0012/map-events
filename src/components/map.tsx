@@ -14,7 +14,7 @@ import { LatLng, LatLngTuple } from 'leaflet'
 import { useRouter } from 'next/router'
 import { useLocalStorage } from '@mantine/hooks'
 
-export default function map({ report }: { report?: Boolean }) {
+export default function Map({ report }: { report?: Boolean }) {
   const position = [14.599, 120.98] as LatLngTuple
   const router = useRouter()
 

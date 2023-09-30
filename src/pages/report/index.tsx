@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import React from 'react'
 import Form from './Form'
 
-const Map = dynamic(() => import('../../components/map'), { ssr: false })
+const Map = dynamic(() => import('../../components/Map'), { ssr: false })
 
 export default function report() {
   return (
