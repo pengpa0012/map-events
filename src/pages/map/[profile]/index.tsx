@@ -1,5 +1,5 @@
 import { Carousel } from '@mantine/carousel'
-import { Button, Container, Image, Input } from '@mantine/core'
+import { Button, Container, Image, Input, Avatar } from '@mantine/core'
 import React from 'react'
 
 export default function profile() {
@@ -47,12 +47,9 @@ export default function profile() {
         <div className="mt-10">
           <h3 className="mb-4 text-">Comments</h3>
           <div className="flex flex-col gap-5">
-            <div className="p-2 rounded-md flex items-center gap-2">
-              <Image
-                src="https://via.placeholder.com/50x50"
-                className="rounded-full w-[50px]"
-              />
-              <p className="text-sm text-gray-800">
+            <div className="p-2 rounded-md flex items-center gap-5">
+              <Avatar src="https://via.placeholder.com/50x50" alt="Username" />
+              <p className="text-sm text-gray-800 text-justify">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Deleniti, provident asperiores! Blanditiis, earum quisquam
                 perspiciatis cupiditate fuga facere ratione voluptatum!
