@@ -1,12 +1,11 @@
 import React from 'react'
 import { Container } from '@mantine/core'
-import { useForm } from '@mantine/form'
 import Form from '@/components/Form'
 
-export default function login() {
+export default function signup() {
   return (
     <Container size="xs">
-      <Form />
+      <Form isSignup />
     </Container>
   )
 }

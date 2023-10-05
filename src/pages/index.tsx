@@ -18,7 +18,7 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    if (!isLoggedIn) router.push('/login')
+    if (!isLoggedIn) router.push('/signup')
   }, [])
 
   const Feed = ({ array }: { array: any[] }) => (

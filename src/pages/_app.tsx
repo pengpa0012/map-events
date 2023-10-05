@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <MantineProvider theme={theme}>
-        {router.pathname == '/login' ? (
+        {router.pathname == '/login' || router.pathname == '/signup' ? (
           <Component {...pageProps} />
         ) : (
           <AppShell
