@@ -1,8 +1,12 @@
+import { API } from '@/util/fetch'
 import { Carousel } from '@mantine/carousel'
 import { Button, Container, Image, Input, Avatar } from '@mantine/core'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function profile() {
+  // useEffect(() => {
+  //   API('/post/getPost').then((data) => console.log(data))
+  // }, [])
   return (
     <Container className="pt-10 pb-20">
       <Carousel withIndicators height={500} loop withControls>

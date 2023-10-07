@@ -1,9 +1,13 @@
+import { API } from '@/util/fetch'
 import { Container, Group, Image, Tabs } from '@mantine/core'
 import dynamic from 'next/dynamic'
-import React from 'react'
+import React, { useEffect } from 'react'
 const Card = dynamic(() => import('../../components/Card'), { ssr: false })
 
 export default function profile() {
+  // useEffect(() => {
+  //   API('/user/getUser').then((data) => console.log(data))
+  // }, [])
   return (
     <Container className="pt-10 pb-20" size={1440}>
       <div className="flex flex-col items-center justify-center gap-5 mb-20">

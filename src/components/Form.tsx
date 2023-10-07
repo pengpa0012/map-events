@@ -9,6 +9,7 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useRouter } from 'next/router'
+import { API } from '@/util/fetch'
 
 type FormValues = {
   username: String
@@ -31,6 +32,16 @@ export default function signup({ isSignup }: { isSignup?: boolean }) {
     form.validate()
     if (isSignup) router.push('/login')
     else router.push('/')
+    // API(`/${isSignup ? 'signup' : 'login'}`, {
+    //   method: 'POST',
+    //   headers: !isSignup && {
+    //     'x-access-token': 'Twet',
+    //   },
+    //   body: JSON.stringify({
+    //     username: '12',
+    //     password: 'tet',
+    //   }),
+    // }).then((data) => console.log(data))
   }
 
   return (

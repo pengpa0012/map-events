@@ -1,3 +1,4 @@
+import { API } from '@/util/fetch'
 import {
   Container,
   Group,
@@ -19,6 +20,17 @@ export default function Home() {
 
   useEffect(() => {
     if (!isLoggedIn) router.push('/signup')
+    // API('https://jsonplaceholder.typicode.com/post', {
+    //   method: 'POST',
+    //   headers: {
+    //     'x-access-token': 'Twet',
+    //   },
+    //   body: JSON.stringify({
+    //     id: '12',
+    //     title: 'tet',
+    //     description: '123',
+    //   }),
+    // }).then((data) => console.log(data))
   }, [])
 
   const Feed = ({ array }: { array: any[] }) => (
