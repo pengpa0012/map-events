@@ -15,11 +15,11 @@ import { useEffect, useState } from 'react'
 const Card = dynamic(() => import('../components/Card'), { ssr: false })
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
-    if (!isLoggedIn) router.push('/signup')
+    if (!isLoggedIn) router.push('/login')
     // API('https://jsonplaceholder.typicode.com/post', {
     //   method: 'POST',
     //   headers: {

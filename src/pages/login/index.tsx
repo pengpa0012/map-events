@@ -6,7 +6,7 @@ import Form from '@/components/Form'
 export default function login() {
   return (
     <Container size="xs">
-      <Form />
+      <Form isSignup={false} />
     </Container>
   )
 }

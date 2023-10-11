@@ -10,7 +10,7 @@ import {
 import { useForm } from '@mantine/form'
 import { useRouter } from 'next/router'
 import { API } from '@/util/fetch'
-
+import { notifications } from '@mantine/notifications'
 type FormValues = {
   username: String
   password: String
@@ -23,25 +23,40 @@ export default function signup({ isSignup }: { isSignup?: boolean }) {
       username: (value) => (!value ? 'Enter Username' : null),
       password: (value) => (!value ? 'Enter Password' : null),
       confirm_password: (value, values) =>
-        value !== values.password ? 'Password does not match' : null,
+        !isSignup
+          ? null
+          : value !== values.password
+          ? 'Password does not match'
+          : null,
     },
   })
   const router = useRouter()
 
   const onSubmit = (values: FormValues) => {
     form.validate()
-    if (isSignup) router.push('/login')
-    else router.push('/')
-    // API(`/${isSignup ? 'signup' : 'login'}`, {
-    //   method: 'POST',
-    //   headers: !isSignup && {
-    //     'x-access-token': 'Twet',
-    //   },
-    //   body: JSON.stringify({
-    //     username: '12',
-    //     password: 'tet',
-    //   }),
-    // }).then((data) => console.log(data))
+    const { username, password } = values
+    API(
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/user/${
+        isSignup ? 'signup' : 'login'
+      }`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      }
+    )
+      .then((data) => {
+        router.push(`${isSignup ? '/login' : '/'}`)
+      })
+      .catch((err) => {
+        notifications.show({
+          title: 'Error',
+          message: err.message,
+          color: 'red',
+        })
+      })
   }
 
   return (

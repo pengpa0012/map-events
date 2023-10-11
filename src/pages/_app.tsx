@@ -4,8 +4,10 @@ import { MantineProvider, createTheme, AppShell, NavLink } from '@mantine/core'
 import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
 import '@mantine/carousel/styles.css'
+import '@mantine/notifications/styles.css'
 import { useDisclosure } from '@mantine/hooks'
 import { useRouter } from 'next/router'
+import { Notifications } from '@mantine/notifications'
 
 export default function App({ Component, pageProps }: AppProps) {
   const [opened, { toggle }] = useDisclosure()
@@ -15,6 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <MantineProvider theme={theme}>
+        <Notifications position="top-right" />
         {router.pathname == '/login' || router.pathname == '/signup' ? (
           <Component {...pageProps} />
         ) : (
