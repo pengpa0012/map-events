@@ -8,6 +8,7 @@ import {
   Button,
   Tabs,
 } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -19,18 +20,26 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    if (!isLoggedIn) router.push('/login')
-    // API('https://jsonplaceholder.typicode.com/post', {
-    //   method: 'POST',
-    //   headers: {
-    //     'x-access-token': 'Twet',
-    //   },
-    //   body: JSON.stringify({
-    //     id: '12',
-    //     title: 'tet',
-    //     description: '123',
-    //   }),
-    // }).then((data) => console.log(data))
+    if (!isLoggedIn) {
+      router.push('/login')
+      return
+    }
+    API(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
+      method: 'GET',
+      headers: {
+        'x-access-token': 'TOKEN',
+      },
+    })
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((err) => {
+        notifications.show({
+          title: 'Error',
+          message: err.message,
+          color: 'red',
+        })
+      })
   }, [])
 
   const Feed = ({ array }: { array: any[] }) => (
