@@ -9,8 +9,8 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useRouter } from 'next/router'
-import { API } from '@/util/fetch'
 import { notifications } from '@mantine/notifications'
+import axios from 'axios'
 type FormValues = {
   username: String
   password: String
@@ -35,19 +35,18 @@ export default function signup({ isSignup }: { isSignup?: boolean }) {
   const onSubmit = (values: FormValues) => {
     form.validate()
     const { username, password } = values
-    API(
-      `${process.env.NEXT_PUBLIC_ENDPOINT}/user/${
-        isSignup ? 'signup' : 'login'
-      }`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_ENDPOINT}/user/${
+          isSignup ? 'signup' : 'login'
+        }`,
+        {
           username,
           password,
-        }),
-      }
-    )
+        }
+      )
       .then((data) => {
+        console.log(data)
         router.push(`${isSignup ? '/login' : '/'}`)
       })
       .catch((err) => {

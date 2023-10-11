@@ -1,4 +1,3 @@
-import { API } from '@/util/fetch'
 import {
   Container,
   Group,
@@ -9,6 +8,7 @@ import {
   Tabs,
 } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
+import axios from 'axios'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -24,12 +24,12 @@ export default function Home() {
       router.push('/login')
       return
     }
-    API(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
-      method: 'GET',
-      headers: {
-        'x-access-token': 'TOKEN',
-      },
-    })
+    axios
+      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
+        headers: {
+          'x-access-token': 'TOKEN',
+        },
+      })
       .then((data) => {
         console.log(data)
       })

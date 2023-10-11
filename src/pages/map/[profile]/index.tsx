@@ -1,17 +1,17 @@
-import { API } from '@/util/fetch'
 import { Carousel } from '@mantine/carousel'
 import { Button, Container, Image, Input, Avatar } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
+import axios from 'axios'
 import React, { useEffect } from 'react'
 
 export default function profile() {
   useEffect(() => {
-    API(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=ID`, {
-      method: 'POST',
-      headers: {
-        'x-access-token': 'TOKEN',
-      },
-    })
+    axios
+      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=ID`, {
+        headers: {
+          'x-access-token': 'TOKEN',
+        },
+      })
       .then((data) => {
         console.log(data)
       })

@@ -6,7 +6,6 @@ import React, { useState } from 'react'
 import { LatLng } from 'leaflet'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
 import { IconTrash } from '@tabler/icons-react'
-import { API } from '@/util/fetch'
 
 export default function Form() {
   const [images, setImages] = useState<File[]>([])
@@ -30,8 +29,7 @@ export default function Form() {
   const onSubmit = (values: any) => {
     if (images.length == 0 || selectedPosition?.lat == undefined) {
       return console.log('Image and Position Required')
-      // API(`/post/createPost`, {
-      //   method: 'POST',
+      // axios.post(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/createPost`, {
       //   headers: {
       //     'x-access-token': 'Twet',
       //   },
