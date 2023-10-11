@@ -7,6 +7,7 @@ import {
   Button,
   Tabs,
 } from '@mantine/core'
+import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
@@ -16,29 +17,27 @@ import { useEffect, useState } from 'react'
 const Card = dynamic(() => import('../components/Card'), { ssr: false })
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [token, _] = useLocalStorage({ key: 'token' })
   const router = useRouter()
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      router.push('/login')
-      return
-    }
     axios
       .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
         headers: {
-          'x-access-token': 'TOKEN',
+          'x-access-token': token,
         },
       })
       .then((data) => {
         console.log(data)
       })
       .catch((err) => {
-        notifications.show({
-          title: 'Error',
-          message: err.message,
-          color: 'red',
-        })
+        if (!err.auth) router.push('/login')
+        else
+          notifications.show({
+            title: 'Error',
+            message: err.message,
+            color: 'red',
+          })
       })
   }, [])
 

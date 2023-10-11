@@ -11,6 +11,7 @@ import { useForm } from '@mantine/form'
 import { useRouter } from 'next/router'
 import { notifications } from '@mantine/notifications'
 import axios from 'axios'
+import { useLocalStorage } from '@mantine/hooks'
 type FormValues = {
   username: String
   password: String
@@ -18,6 +19,8 @@ type FormValues = {
 }
 
 export default function signup({ isSignup }: { isSignup?: boolean }) {
+  const [, setID] = useLocalStorage({ key: 'id' })
+  const [, setToken] = useLocalStorage({ key: 'token' })
   const form = useForm<FormValues>({
     validate: {
       username: (value) => (!value ? 'Enter Username' : null),
@@ -46,7 +49,10 @@ export default function signup({ isSignup }: { isSignup?: boolean }) {
         }
       )
       .then((data) => {
-        console.log(data)
+        if (!isSignup) {
+          setID(data.data.result[0]._id)
+          setToken(data.data.accessToken)
+        }
         router.push(`${isSignup ? '/login' : '/'}`)
       })
       .catch((err) => {
