@@ -1,15 +1,18 @@
 import { Carousel } from '@mantine/carousel'
 import { Button, Container, Image, Input, Avatar } from '@mantine/core'
+import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import axios from 'axios'
 import React, { useEffect } from 'react'
 
 export default function profile() {
+  const [token, _] = useLocalStorage({ key: 'token' })
+
   useEffect(() => {
     axios
       .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=ID`, {
         headers: {
-          'x-access-token': 'TOKEN',
+          'x-access-token': token,
         },
       })
       .then((data) => {

@@ -6,10 +6,12 @@ import React, { useState } from 'react'
 import { LatLng } from 'leaflet'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
 import { IconTrash } from '@tabler/icons-react'
+import axios from 'axios'
 
 export default function Form() {
   const [images, setImages] = useState<File[]>([])
   const [selectedPosition, _] = useLocalStorage<LatLng>({ key: 'position' })
+  const [token, setToken] = useLocalStorage({ key: 'token' })
 
   const form = useForm({
     initialValues: {
@@ -27,21 +29,24 @@ export default function Form() {
   })
 
   const onSubmit = (values: any) => {
+    const { username, title, description, date_created } = values
     if (images.length == 0 || selectedPosition?.lat == undefined) {
-      return console.log('Image and Position Required')
-      // axios.post(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/createPost`, {
-      //   headers: {
-      //     'x-access-token': 'Twet',
-      //   },
-      //   body: JSON.stringify({
-      //     username,
-      //     title,
-      //     description,
-      //     location,
-      //     date_created,
-      //     images
-      //   }),
-      // }).then((data) => console.log(data))
+      axios
+        .post(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/createPost`, {
+          headers: {
+            'x-access-token': token,
+          },
+          body: JSON.stringify({
+            username,
+            title,
+            description,
+            location: selectedPosition,
+            date_created,
+            images:
+              'https://fastly.picsum.photos/id/810/500/500.jpg?hmac=h0nCt85ZStE-xnawh64dM5ag8rs8Vn3tgwgxDaQ9Fmk',
+          }),
+        })
+        .then((data) => console.log(data))
     }
     console.log(values, selectedPosition)
   }
@@ -102,7 +107,7 @@ export default function Form() {
       >
         <Input.Wrapper label="Title" withAsterisk>
           <Input placeholder="Enter title" {...form.getInputProps('title')} />
-        </Input.Wrapper>
+        </Input.Wrapper> 
         <Group grow>
           <DatePickerInput
             label="Date"

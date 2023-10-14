@@ -1,14 +1,7 @@
-import {
-  Container,
-  Group,
-  Image,
-  Text,
-  Badge,
-  Button,
-  Tabs,
-} from '@mantine/core'
+import { Container, Group, Text, Tabs } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
+import { IconBan } from '@tabler/icons-react'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
@@ -18,6 +11,7 @@ const Card = dynamic(() => import('../components/Card'), { ssr: false })
 
 export default function Home() {
   const [token, _] = useLocalStorage({ key: 'token' })
+  const [posts, setPosts] = useState([])
   const router = useRouter()
 
   useEffect(() => {
@@ -28,7 +22,7 @@ export default function Home() {
         },
       })
       .then((data) => {
-        console.log(data)
+        setPosts(data.data.result)
       })
       .catch((err) => {
         if (!err.auth) router.push('/login')
@@ -57,14 +51,28 @@ export default function Home() {
       <Tabs defaultValue="All">
         <Tabs.List className="mb-10">
           <Tabs.Tab value="All">All</Tabs.Tab>
-          <Tabs.Tab value="Following">Following</Tabs.Tab>
+          {/* <Tabs.Tab value="Following">Following</Tabs.Tab> */}
         </Tabs.List>
         <Tabs.Panel value="All">
-          <Feed array={[1, 2, 3, 4, 5]} />
+          {posts.length > 0 ? (
+            <Feed array={posts} />
+          ) : (
+            <div className="text-center flex flex-col items-center">
+              <IconBan size={48} strokeWidth={2} color={'gray'} />
+              <p className="text-2xl text-gray-400">No Data</p>
+            </div>
+          )}
         </Tabs.Panel>
-        <Tabs.Panel value="Following">
-          <Feed array={[1, 2, 3]} />
-        </Tabs.Panel>
+        {/* <Tabs.Panel value="Following">
+          {posts.length > 0 ? (
+            <Feed array={posts} />
+          ) : (
+            <div className="text-center flex flex-col items-center">
+              <IconBan size={48} strokeWidth={2} color={'gray'} />
+              <p className="text-2xl text-gray-400">No Data</p>
+            </div>
+          )}
+        </Tabs.Panel> */}
       </Tabs>
     </Container>
   )

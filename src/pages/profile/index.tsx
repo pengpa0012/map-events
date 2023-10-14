@@ -1,4 +1,5 @@
 import { Container, Group, Image, Tabs } from '@mantine/core'
+import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
@@ -6,11 +7,12 @@ import React, { useEffect } from 'react'
 const Card = dynamic(() => import('../../components/Card'), { ssr: false })
 
 export default function profile() {
+  const [token, _] = useLocalStorage({ key: 'token' })
   useEffect(() => {
     axios
       .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=ID`, {
         headers: {
-          'x-access-token': 'TOKEN',
+          'x-access-token': token,
         },
       })
       .then((data) => {
