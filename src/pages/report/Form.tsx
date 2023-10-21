@@ -7,6 +7,9 @@ import { LatLng } from 'leaflet'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
 import { IconTrash } from '@tabler/icons-react'
 import axios from 'axios'
+import { storage } from '@/utilities/firebase'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { v4 } from 'uuid'
 
 export default function Form() {
   const [images, setImages] = useState<File[]>([])
@@ -31,22 +34,29 @@ export default function Form() {
   const onSubmit = (values: any) => {
     const { username, title, description, date_created } = values
     if (images.length == 0 || selectedPosition?.lat == undefined) {
-      axios
-        .post(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/createPost`, {
-          headers: {
-            'x-access-token': token,
-          },
-          body: JSON.stringify({
-            username,
-            title,
-            description,
-            location: selectedPosition,
-            date_created,
-            images:
-              'https://fastly.picsum.photos/id/810/500/500.jpg?hmac=h0nCt85ZStE-xnawh64dM5ag8rs8Vn3tgwgxDaQ9Fmk',
-          }),
-        })
-        .then((data) => console.log(data))
+      // const imageRef = ref(
+      //   storage,
+      //   `${updateProfile.profile_image.name + v4()}`
+      // )
+      // uploadBytes(imageRef, images).then((snapshot) => {
+      //   getDownloadURL(snapshot.ref).then((url) => {
+      //     axios
+      //       .post(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/createPost`, {
+      //         headers: {
+      //           'x-access-token': token,
+      //         },
+      //         body: JSON.stringify({
+      //           username,
+      //           title,
+      //           description,
+      //           location: selectedPosition,
+      //           date_created,
+      //           images: url,
+      //         }),
+      //       })
+      //       .then((data) => console.log(data))
+      //   })
+      // })
     }
     console.log(values, selectedPosition)
   }
@@ -107,7 +117,7 @@ export default function Form() {
       >
         <Input.Wrapper label="Title" withAsterisk>
           <Input placeholder="Enter title" {...form.getInputProps('title')} />
-        </Input.Wrapper> 
+        </Input.Wrapper>
         <Group grow>
           <DatePickerInput
             label="Date"
