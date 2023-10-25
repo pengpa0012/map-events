@@ -10,11 +10,16 @@ import axios from 'axios'
 import { storage } from '@/utilities/firebase'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { v4 } from 'uuid'
+import { notifications } from '@mantine/notifications'
+import { useRouter } from 'next/router'
 
 export default function Form() {
   const [images, setImages] = useState<File[]>([])
   const [selectedPosition, _] = useLocalStorage<LatLng>({ key: 'position' })
   const [token, setToken] = useLocalStorage({ key: 'token' })
+  const [userId] = useLocalStorage({ key: 'id' })
+  const [btnLoading, setBtnLoading] = useState(false)
+  const router = useRouter()
 
   const form = useForm({
     initialValues: {
@@ -32,33 +37,48 @@ export default function Form() {
   })
 
   const onSubmit = (values: any) => {
-    const { username, title, description, date_created } = values
+    const { title, description, date_created } = values
     if (images.length == 0 || selectedPosition?.lat == undefined) {
-      // const imageRef = ref(
-      //   storage,
-      //   `${updateProfile.profile_image.name + v4()}`
-      // )
-      // uploadBytes(imageRef, images).then((snapshot) => {
-      //   getDownloadURL(snapshot.ref).then((url) => {
-      //     axios
-      //       .post(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/createPost`, {
-      //         headers: {
-      //           'x-access-token': token,
-      //         },
-      //         body: JSON.stringify({
-      //           username,
-      //           title,
-      //           description,
-      //           location: selectedPosition,
-      //           date_created,
-      //           images: url,
-      //         }),
-      //       })
-      //       .then((data) => console.log(data))
-      //   })
-      // })
+      notifications.show({
+        title: 'Error',
+        message: 'Pin a location!',
+        color: 'red',
+      })
+      return
     }
-    console.log(values, selectedPosition)
+    setBtnLoading(true)
+    const imageRef = ref(storage, `/reports/${images[0].name + v4()}`)
+    uploadBytes(imageRef, images[0]).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        axios
+          .post(
+            `${process.env.NEXT_PUBLIC_ENDPOINT}/post/createPost`,
+            {
+              user: userId,
+              title,
+              description,
+              location: selectedPosition,
+              date_created,
+              images: url,
+            },
+            {
+              headers: {
+                'x-access-token': token,
+              },
+            }
+          )
+          .then((data) => {
+            notifications.show({
+              title: 'Success',
+              message: 'Report Created!',
+              color: 'blue',
+            })
+            setBtnLoading(false)
+            router.back()
+            console.log(data)
+          })
+      })
+    })
   }
 
   const onRemoveImage = (name: string) => {
@@ -90,26 +110,34 @@ export default function Form() {
             </div>
           )
         })}
-        <Dropzone
-          multiple
-          onDrop={(files) => {
-            setImages((prev) => [...prev, files[0]])
-          }}
-          maxSize={3 * 1024 ** 2}
-          accept={IMAGE_MIME_TYPE}
-          className="border-2 border-dashed bg-gray-100/50 px-12 rounded-md cursor-pointer hover:bg-gray-100"
-        >
-          <Group
-            justify="center"
-            gap="xl"
-            mih={220}
-            style={{ pointerEvents: 'none' }}
+        {images.length == 0 ? (
+          <Dropzone
+            onDrop={(files) => {
+              setImages((prev) => [...prev, files[0]])
+            }}
+            onReject={(err) => {
+              notifications.show({
+                title: 'Error',
+                message: err[0].errors[0].code,
+                color: 'red',
+              })
+            }}
+            maxSize={1024 ** 2}
+            accept={IMAGE_MIME_TYPE}
+            className="border-2 border-dashed bg-gray-100/50 px-12 rounded-md cursor-pointer hover:bg-gray-100"
           >
-            <Text size="xl" className="text-center" inline>
-              Upload Image
-            </Text>
-          </Group>
-        </Dropzone>
+            <Group
+              justify="center"
+              gap="xl"
+              mih={220}
+              style={{ pointerEvents: 'none' }}
+            >
+              <Text size="xl" className="text-center" inline>
+                Upload Image
+              </Text>
+            </Group>
+          </Dropzone>
+        ) : undefined}
       </div>
       <form
         className="p-2 flex flex-col gap-5"
@@ -138,7 +166,7 @@ export default function Form() {
           styles={{ input: { height: 150 } }}
           {...form.getInputProps('description')}
         />
-        <Button variant="filled" size="lg" type="submit">
+        <Button variant="filled" size="lg" type="submit" loading={btnLoading}>
           Report Event
         </Button>
       </form>
