@@ -13,8 +13,9 @@ export default function Home() {
   const [token, _] = useLocalStorage({ key: 'token' })
   const [posts, setPosts] = useState([])
   const router = useRouter()
-
+  console.log(token)
   useEffect(() => {
+    if (token == undefined) return
     axios
       .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
         headers: {
@@ -33,7 +34,7 @@ export default function Home() {
             color: 'red',
           })
       })
-  }, [])
+  }, [token])
 
   const Feed = ({ array }: { array: any[] }) => (
     <Group wrap="wrap" gap={30}>

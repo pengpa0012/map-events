@@ -9,6 +9,7 @@ export default function map() {
   const [token, _] = useLocalStorage({ key: 'token' })
 
   useEffect(() => {
+    if (token == undefined) return
     axios
       .post(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
         headers: {
@@ -25,6 +26,6 @@ export default function map() {
           color: 'red',
         })
       })
-  }, [])
+  }, [token])
   return <Map />
 }

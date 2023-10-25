@@ -9,6 +9,7 @@ const Card = dynamic(() => import('../../components/Card'), { ssr: false })
 export default function profile() {
   const [token, _] = useLocalStorage({ key: 'token' })
   useEffect(() => {
+    if (token == undefined) return
     axios
       .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=ID`, {
         headers: {
@@ -25,7 +26,7 @@ export default function profile() {
           color: 'red',
         })
       })
-  }, [])
+  }, [token])
   return (
     <Container className="pt-10 pb-20" size={1440}>
       <div className="flex flex-col items-center justify-center gap-5 mb-20">
