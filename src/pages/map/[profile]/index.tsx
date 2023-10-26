@@ -3,19 +3,25 @@ import { Button, Container, Image, Input, Avatar } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 
 export default function profile() {
   const [token, _] = useLocalStorage({ key: 'token' })
-
+  const router = useRouter()
+  console.log(router.query.profile)
   useEffect(() => {
-    if (token == undefined) return
+    if (token == undefined && router.query.profile) return
+    console.log('EYAYA')
     axios
-      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=ID`, {
-        headers: {
-          'x-access-token': token,
-        },
-      })
+      .get(
+        `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=${router.query.profile}`,
+        {
+          headers: {
+            'x-access-token': token,
+          },
+        }
+      )
       .then((data) => {
         console.log(data)
       })

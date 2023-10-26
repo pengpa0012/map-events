@@ -14,7 +14,13 @@ import { LatLng, LatLngTuple } from 'leaflet'
 import { useRouter } from 'next/router'
 import { useLocalStorage } from '@mantine/hooks'
 
-export default function Map({ report }: { report?: Boolean }) {
+export default function Map({
+  report,
+  locations,
+}: {
+  report?: Boolean
+  locations?: any
+}) {
   const position = [14.599, 120.98] as LatLngTuple
   const router = useRouter()
 
@@ -36,7 +42,7 @@ export default function Map({ report }: { report?: Boolean }) {
     if (markerPosition?.lat == null) return
     return <Marker position={[markerPosition.lat, markerPosition.lng]}></Marker>
   }
-
+  console.log(locations)
   return (
     <MapContainer
       center={position}
@@ -51,22 +57,21 @@ export default function Map({ report }: { report?: Boolean }) {
       {report ? (
         <LocationMarker />
       ) : (
-        <Marker position={position}>
-          <Popup>
-            <p className="text-md">A cute dog in a park</p>
-            <img
-              src="https://via.placeholder.com/100x100"
-              className="w-full my-2"
-            />
-            <Button
-              variant="filled"
-              onClick={() => router.push('/map/321')}
-              className="w-full"
-            >
-              Open
-            </Button>
-          </Popup>
-        </Marker>
+        locations?.map((el: any) => (
+          <Marker position={[el.location.lat, el.location.lng]}>
+            <Popup>
+              <p className="text-md">{el.title}</p>
+              <img src={el.images[0]} className="w-full my-2" />
+              <Button
+                variant="filled"
+                onClick={() => router.push(`/map/${el._id}`)}
+                className="w-full"
+              >
+                Open
+              </Button>
+            </Popup>
+          </Marker>
+        ))
       )}
     </MapContainer>
   )

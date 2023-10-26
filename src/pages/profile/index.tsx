@@ -10,22 +10,22 @@ export default function profile() {
   const [token, _] = useLocalStorage({ key: 'token' })
   useEffect(() => {
     if (token == undefined) return
-    axios
-      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=ID`, {
-        headers: {
-          'x-access-token': token,
-        },
-      })
-      .then((data) => {
-        console.log(data)
-      })
-      .catch((err) => {
-        notifications.show({
-          title: 'Error',
-          message: err.message,
-          color: 'red',
-        })
-      })
+    // axios
+    //   .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=ID`, {
+    //     headers: {
+    //       'x-access-token': token,
+    //     },
+    //   })
+    //   .then((data) => {
+    //     console.log(data)
+    //   })
+    //   .catch((err) => {
+    //     notifications.show({
+    //       title: 'Error',
+    //       message: err.message,
+    //       color: 'red',
+    //     })
+    //   })
   }, [token])
   return (
     <Container className="pt-10 pb-20" size={1440}>
