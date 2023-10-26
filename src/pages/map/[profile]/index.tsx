@@ -4,15 +4,14 @@ import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function profile() {
   const [token, _] = useLocalStorage({ key: 'token' })
+  const [profile, setProfile] = useState<any>({})
   const router = useRouter()
-  console.log(router.query.profile)
   useEffect(() => {
-    if (token == undefined && router.query.profile) return
-    console.log('EYAYA')
+    if (token == undefined || router.query.profile == undefined) return
     axios
       .get(
         `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=${router.query.profile}`,
@@ -23,7 +22,7 @@ export default function profile() {
         }
       )
       .then((data) => {
-        console.log(data)
+        setProfile(data.data.result[0])
       })
       .catch((err) => {
         notifications.show({
@@ -32,49 +31,31 @@ export default function profile() {
           color: 'red',
         })
       })
-  }, [token])
+  }, [token, router.query.profile])
   return (
     <Container className="pt-10 pb-20">
       <Carousel withIndicators height={500} loop withControls>
-        <Carousel.Slide>
-          <Image
-            src="https://via.placeholder.com/1280x500"
-            className="w-full h-full rounded-md"
-            fit="cover"
-          />
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <Image
-            src="https://via.placeholder.com/1280x500"
-            className="w-full h-full rounded-md"
-            fit="cover"
-          />
-        </Carousel.Slide>
-        <Carousel.Slide>
-          <Image
-            src="https://via.placeholder.com/1280x500"
-            className="w-full h-full rounded-md"
-            fit="cover"
-          />
-        </Carousel.Slide>
+        {profile.images?.map((el: any) => (
+          <Carousel.Slide>
+            <Image
+              src={el}
+              className="w-full h-full rounded-md"
+              fit="contain"
+            />
+          </Carousel.Slide>
+        ))}
       </Carousel>
       <div className="px-4">
         <div className="flex justify-between items-center py-4">
-          <h2 className="text-2xl">Title</h2>
+          <h2 className="text-2xl">{profile.title}</h2>
           <div className="flex gap-5">
-            <p>Date</p>
-            <p>Time</p>
+            <p>{profile.date_created}</p>
           </div>
         </div>
         <p className="text-lg py-2 text-gray-600 text-justify">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio
-          corrupti minima adipisci et aliquam sit similique vero. Nulla ut
-          aliquid odio hic quaerat ratione aperiam saepe, magnam excepturi cum.
-          Aut delectus ratione dolorum repellat aliquam, velit, impedit
-          voluptates assumenda voluptas natus fugiat omnis quo pariatur ab
-          quidem minus? Esse, perspiciatis.
+          {profile.description}
         </p>
-        <div className="mt-10">
+        {/* <div className="mt-10">
           <h3 className="mb-4 text-">Comments</h3>
           <div className="flex flex-col gap-5">
             <div className="p-2 rounded-md flex items-center gap-5">
@@ -92,7 +73,7 @@ export default function profile() {
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Container>
   )

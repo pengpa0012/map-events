@@ -58,7 +58,7 @@ export default function Map({
         <LocationMarker />
       ) : (
         locations?.map((el: any) => (
-          <Marker position={[el.location.lat, el.location.lng]}>
+          <Marker position={[el.location.lat, el.location.lng]} key={el._id}>
             <Popup>
               <p className="text-md">{el.title}</p>
               <img src={el.images[0]} className="w-full my-2" />
