@@ -37,6 +37,7 @@ export default function Form() {
   })
 
   const onSubmit = (values: any) => {
+    let imagesUrl: any[] = []
     const { title, description, date_created } = values
     if (images.length == 0 || selectedPosition?.lat == undefined) {
       notifications.show({
@@ -59,7 +60,7 @@ export default function Form() {
               description,
               location: selectedPosition,
               date_created,
-              images: url,
+              images: [url],
             },
             {
               headers: {
@@ -79,6 +80,7 @@ export default function Form() {
           })
       })
     })
+    console.log(imagesUrl)
   }
 
   const onRemoveImage = (name: string) => {
@@ -110,34 +112,32 @@ export default function Form() {
             </div>
           )
         })}
-        {images.length == 0 ? (
-          <Dropzone
-            onDrop={(files) => {
-              setImages((prev) => [...prev, files[0]])
-            }}
-            onReject={(err) => {
-              notifications.show({
-                title: 'Error',
-                message: err[0].errors[0].code,
-                color: 'red',
-              })
-            }}
-            maxSize={1024 ** 2}
-            accept={IMAGE_MIME_TYPE}
-            className="border-2 border-dashed bg-gray-100/50 px-12 rounded-md cursor-pointer hover:bg-gray-100"
+        <Dropzone
+          onDrop={(files) => {
+            setImages((prev) => [...prev, files[0]])
+          }}
+          onReject={(err) => {
+            notifications.show({
+              title: 'Error',
+              message: err[0].errors[0].code,
+              color: 'red',
+            })
+          }}
+          maxSize={1024 ** 2}
+          accept={IMAGE_MIME_TYPE}
+          className="border-2 border-dashed bg-gray-100/50 px-12 rounded-md cursor-pointer hover:bg-gray-100"
+        >
+          <Group
+            justify="center"
+            gap="xl"
+            mih={220}
+            style={{ pointerEvents: 'none' }}
           >
-            <Group
-              justify="center"
-              gap="xl"
-              mih={220}
-              style={{ pointerEvents: 'none' }}
-            >
-              <Text size="xl" className="text-center" inline>
-                Upload Image
-              </Text>
-            </Group>
-          </Dropzone>
-        ) : undefined}
+            <Text size="xl" className="text-center" inline>
+              Upload Image
+            </Text>
+          </Group>
+        </Dropzone>
       </div>
       <form
         className="p-2 flex flex-col gap-5"

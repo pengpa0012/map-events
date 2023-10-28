@@ -3,29 +3,35 @@ import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
-import React, { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
 const Card = dynamic(() => import('../../components/Card'), { ssr: false })
 
 export default function profile() {
   const [token, _] = useLocalStorage({ key: 'token' })
+  const [posts, setPosts] = useState([])
+  const router = useRouter()
+
   useEffect(() => {
     if (token == undefined) return
-    // axios
-    //   .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=ID`, {
-    //     headers: {
-    //       'x-access-token': token,
-    //     },
-    //   })
-    //   .then((data) => {
-    //     console.log(data)
-    //   })
-    //   .catch((err) => {
-    //     notifications.show({
-    //       title: 'Error',
-    //       message: err.message,
-    //       color: 'red',
-    //     })
-    //   })
+    axios
+      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
+        headers: {
+          'x-access-token': token,
+        },
+      })
+      .then((data) => {
+        setPosts(data.data.result)
+      })
+      .catch((err) => {
+        if (!err.auth) router.push('/login')
+        else
+          notifications.show({
+            title: 'Error',
+            message: err.message,
+            color: 'red',
+          })
+      })
   }, [token])
   return (
     <Container className="pt-10 pb-20" size={1440}>
@@ -44,8 +50,8 @@ export default function profile() {
         </Tabs.List>
         <Tabs.Panel value="All">
           <Group wrap="wrap" gap={30}>
-            {[1, 2, 3].map((el, i) => (
-              <Card key={`card-${i}`} />
+            {posts.map((el, i) => (
+              <Card key={`card-${i}`} details={el} />
             ))}
           </Group>
         </Tabs.Panel>

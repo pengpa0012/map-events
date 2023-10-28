@@ -39,7 +39,7 @@ export default function Home() {
   const Feed = ({ array }: { array: any[] }) => (
     <Group wrap="wrap" gap={30}>
       {array.map((el, i) => (
-        <Card key={`card-${i}`} />
+        <Card key={`card-${i}`} details={el} />
       ))}
     </Group>
   )

@@ -3,6 +3,7 @@ import { Button, Container, Image, Input, Avatar } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import axios from 'axios'
+import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
@@ -49,7 +50,7 @@ export default function profile() {
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl">{profile.title}</h2>
           <div className="flex gap-5">
-            <p>{profile.date_created}</p>
+            <p>{dayjs(profile.date_created).format('MMMM DD, YYYY hh:mma')}</p>
           </div>
         </div>
         <p className="text-lg py-2 text-gray-600 text-justify">
