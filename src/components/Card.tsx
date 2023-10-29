@@ -10,10 +10,15 @@ export default function Card({ details }: { details: any }) {
       padding="lg"
       radius="md"
       withBorder
-      className="max-w-[329px]"
+      className="min-w-[300px] flex-1"
     >
       <MantineCard.Section>
-        <Image src={details.images[0]} height={160} alt="Norway" />
+        <Image
+          src={details.images[0] || 'https://via.placeholder.com/250x250'}
+          alt="Norway"
+          fit="contain"
+          className="w-full h-[250px]"
+        />
       </MantineCard.Section>
       <Group justify="space-between" mt="md" mb="xs">
         <Text fw={500}>{details.title}</Text>

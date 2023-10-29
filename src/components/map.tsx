@@ -61,7 +61,10 @@ export default function Map({
           <Marker position={[el.location.lat, el.location.lng]} key={el._id}>
             <Popup>
               <p className="text-md">{el.title}</p>
-              <img src={el.images[0]} className="w-full my-2" />
+              <img
+                src={el.images[0] || 'https://via.placeholder.com/150x150'}
+                className="w-full my-2"
+              />
               <Button
                 variant="filled"
                 onClick={() => router.push(`/map/${el._id}`)}
