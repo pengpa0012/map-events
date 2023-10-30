@@ -9,29 +9,31 @@ const Card = dynamic(() => import('../../components/Card'), { ssr: false })
 
 export default function profile() {
   const [token, _] = useLocalStorage({ key: 'token' })
+  const [id, setID] = useLocalStorage({ key: 'id' })
   const [posts, setPosts] = useState([])
   const router = useRouter()
 
   useEffect(() => {
-    if (token == undefined) return
-    axios
-      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
-        headers: {
-          'x-access-token': token,
-        },
-      })
-      .then((data) => {
-        setPosts(data.data.result)
-      })
-      .catch((err) => {
-        if (!err.auth) router.push('/login')
-        else
-          notifications.show({
-            title: 'Error',
-            message: err.message,
-            color: 'red',
-          })
-      })
+    if (!token) {
+    } else
+      axios
+        .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getUserPosts?id=${id}`, {
+          headers: {
+            'x-access-token': token,
+          },
+        })
+        .then((data) => {
+          setPosts(data.data.result)
+        })
+        .catch((err) => {
+          if (!err.auth) router.push('/login')
+          else
+            notifications.show({
+              title: 'Error',
+              message: err.message,
+              color: 'red',
+            })
+        })
   }, [token])
   return (
     <Container className="pt-10 pb-20" size={1440}>

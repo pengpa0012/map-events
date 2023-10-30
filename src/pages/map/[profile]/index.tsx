@@ -12,26 +12,27 @@ export default function profile() {
   const [profile, setProfile] = useState<any>({})
   const router = useRouter()
   useEffect(() => {
-    if (token == undefined || router.query.profile == undefined) return
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=${router.query.profile}`,
-        {
-          headers: {
-            'x-access-token': token,
-          },
-        }
-      )
-      .then((data) => {
-        setProfile(data.data.result[0])
-      })
-      .catch((err) => {
-        notifications.show({
-          title: 'Error',
-          message: err.message,
-          color: 'red',
+    if (!token) {
+    } else
+      axios
+        .get(
+          `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=${router.query.profile}`,
+          {
+            headers: {
+              'x-access-token': token,
+            },
+          }
+        )
+        .then((data) => {
+          setProfile(data.data.result[0])
         })
-      })
+        .catch((err) => {
+          notifications.show({
+            title: 'Error',
+            message: err.message,
+            color: 'red',
+          })
+        })
   }, [token, router.query.profile])
   return (
     <Container className="pt-10 pb-20">

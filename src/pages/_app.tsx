@@ -5,7 +5,7 @@ import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
 import '@mantine/carousel/styles.css'
 import '@mantine/notifications/styles.css'
-import { useDisclosure } from '@mantine/hooks'
+import { useDisclosure, useLocalStorage } from '@mantine/hooks'
 import { useRouter } from 'next/router'
 import { Notifications } from '@mantine/notifications'
 
@@ -13,6 +13,18 @@ export default function App({ Component, pageProps }: AppProps) {
   const [opened, { toggle }] = useDisclosure()
   const router = useRouter()
   const theme = createTheme({})
+  const [token, setToken, removeToken] = useLocalStorage({ key: 'token' })
+  const [position, setPosition, removePosition] = useLocalStorage({
+    key: 'position',
+  })
+  const [id, _, removeID] = useLocalStorage({ key: 'id' })
+
+  const onLogout = () => {
+    removeToken()
+    removePosition()
+    removeID()
+    router.push('/login')
+  }
 
   return (
     <>
@@ -61,7 +73,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <NavLink
                   label="Logout"
                   className="text-center"
-                  onClick={() => router.push('/login')}
+                  onClick={onLogout}
                 />
               </div>
             </AppShell.Navbar>

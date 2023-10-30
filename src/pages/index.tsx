@@ -13,29 +13,28 @@ export default function Home() {
   const [token, _] = useLocalStorage({ key: 'token' })
   const [posts, setPosts] = useState([])
   const router = useRouter()
-  console.log(token)
   useEffect(() => {
-    if (token == undefined) return
-    axios
-      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
-        headers: {
-          'x-access-token': token,
-        },
-      })
-      .then((data) => {
-        setPosts(data.data.result)
-      })
-      .catch((err) => {
-        if (!err.auth) router.push('/login')
-        else
-          notifications.show({
-            title: 'Error',
-            message: err.message,
-            color: 'red',
-          })
-      })
+    if (!token) {
+    } else
+      axios
+        .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
+          headers: {
+            'x-access-token': token,
+          },
+        })
+        .then((data) => {
+          setPosts(data.data.result)
+        })
+        .catch((err) => {
+          if (!err.auth) router.push('/login')
+          else
+            notifications.show({
+              title: 'Error',
+              message: err.message,
+              color: 'red',
+            })
+        })
   }, [token])
-
   const Feed = ({ array }: { array: any[] }) => (
     <Group wrap="wrap" gap={30}>
       {array.map((el, i) => (
