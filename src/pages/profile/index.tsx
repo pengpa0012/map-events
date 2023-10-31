@@ -48,7 +48,7 @@ export default function profile() {
       <Tabs defaultValue="All">
         <Tabs.List className="mb-10">
           <Tabs.Tab value="All">Reported Events</Tabs.Tab>
-          <Tabs.Tab value="Following">Profile Details</Tabs.Tab>
+          {/* <Tabs.Tab value="Following">Profile Details</Tabs.Tab> */}
         </Tabs.List>
         <Tabs.Panel value="All">
           <Group wrap="wrap" gap={30}>
