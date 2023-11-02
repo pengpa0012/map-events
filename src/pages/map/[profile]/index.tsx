@@ -33,19 +33,29 @@ export default function profile() {
             color: 'red',
           })
         })
-  }, [token, router.query.profile])
+  }, [token])
   return (
     <Container className="pt-10 pb-20">
       <Carousel withIndicators height={500} loop withControls>
-        {profile.images?.map((el: any) => (
+        {profile.images?.length > 0 ? (
+          profile.images?.map((el: any) => (
+            <Carousel.Slide>
+              <Image
+                src={el || 'https://via.placeholder.com/800x500'}
+                className="w-full h-full rounded-md"
+                fit="contain"
+              />
+            </Carousel.Slide>
+          ))
+        ) : (
           <Carousel.Slide>
             <Image
-              src={el}
+              src={'https://via.placeholder.com/800x500'}
               className="w-full h-full rounded-md"
               fit="contain"
             />
           </Carousel.Slide>
-        ))}
+        )}
       </Carousel>
       <div className="px-4">
         <div className="flex justify-between items-center py-4">

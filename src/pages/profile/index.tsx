@@ -10,20 +10,35 @@ const Card = dynamic(() => import('../../components/Card'), { ssr: false })
 export default function profile() {
   const [token, _] = useLocalStorage({ key: 'token' })
   const [id, setID] = useLocalStorage({ key: 'id' })
-  const [posts, setPosts] = useState([])
+  const [profile, setProfile] = useState({
+    name: '',
+    posts: [],
+  })
   const router = useRouter()
 
   useEffect(() => {
     if (!token) {
-    } else
-      axios
-        .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getUserPosts?id=${id}`, {
+    } else {
+      Promise.all([
+        axios.get(`${process.env.NEXT_PUBLIC_ENDPOINT}/user/getUser?id=${id}`, {
           headers: {
             'x-access-token': token,
           },
-        })
-        .then((data) => {
-          setPosts(data.data.result)
+        }),
+        axios.get(
+          `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getUserPosts?id=${id}`,
+          {
+            headers: {
+              'x-access-token': token,
+            },
+          }
+        ),
+      ])
+        .then(([user, posts]) => {
+          setProfile({
+            name: user.data.result.username,
+            posts: posts.data.result,
+          })
         })
         .catch((err) => {
           if (!err.auth) router.push('/login')
@@ -34,7 +49,9 @@ export default function profile() {
               color: 'red',
             })
         })
+    }
   }, [token])
+
   return (
     <Container className="pt-10 pb-20" size={1440}>
       <div className="flex flex-col items-center justify-center gap-5 mb-20">
@@ -43,7 +60,7 @@ export default function profile() {
           fit="cover"
           className="rounded-full max-w-[200px]"
         />
-        <h2 className="text-2xl font-bold">Name</h2>
+        <h2 className="text-2xl font-bold">{profile.name}</h2>
       </div>
       <Tabs defaultValue="All">
         <Tabs.List className="mb-10">
@@ -52,7 +69,7 @@ export default function profile() {
         </Tabs.List>
         <Tabs.Panel value="All">
           <Group wrap="wrap" gap={30}>
-            {posts.map((el, i) => (
+            {profile.posts.map((el, i) => (
               <Card key={`card-${i}`} details={el} />
             ))}
           </Group>
