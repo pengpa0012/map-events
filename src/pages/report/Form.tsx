@@ -48,39 +48,44 @@ export default function Form() {
       return
     }
     setBtnLoading(true)
-    const imageRef = ref(storage, `/reports/${images[0].name + v4()}`)
-    uploadBytes(imageRef, images[0]).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then((url) => {
-        axios
-          .post(
-            `${process.env.NEXT_PUBLIC_ENDPOINT}/post/createPost`,
-            {
-              user: userId,
-              title,
-              description,
-              location: selectedPosition,
-              date_created,
-              images: [url],
-            },
-            {
-              headers: {
-                'x-access-token': token,
-              },
-            }
-          )
-          .then((data) => {
-            notifications.show({
-              title: 'Success',
-              message: 'Report Created!',
-              color: 'blue',
-            })
-            setBtnLoading(false)
-            router.back()
-            console.log(data)
+    Promise.all(
+      images.map((el) => {
+        const imageRef = ref(storage, `/reports/${el.name + v4()}`)
+        return uploadBytes(imageRef, el).then((snapshot) => {
+          return getDownloadURL(snapshot.ref).then((url) => {
+            return url
           })
+        })
       })
+    ).then((url) => {
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_ENDPOINT}/post/createPost`,
+          {
+            user: userId,
+            title,
+            description,
+            location: selectedPosition,
+            date_created,
+            images: url,
+          },
+          {
+            headers: {
+              'x-access-token': token,
+            },
+          }
+        )
+        .then((data) => {
+          notifications.show({
+            title: 'Success',
+            message: 'Report Created!',
+            color: 'blue',
+          })
+          setBtnLoading(false)
+          router.back()
+          console.log(data)
+        })
     })
-    console.log(imagesUrl)
   }
 
   const onRemoveImage = (name: string) => {
