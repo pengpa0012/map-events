@@ -17,39 +17,37 @@ export default function profile() {
   const router = useRouter()
 
   useEffect(() => {
-    if (!token) {
-    } else {
-      Promise.all([
-        axios.get(`${process.env.NEXT_PUBLIC_ENDPOINT}/user/getUser?id=${id}`, {
+    if (!token) return
+    Promise.all([
+      axios.get(`${process.env.NEXT_PUBLIC_ENDPOINT}/user/getUser?id=${id}`, {
+        headers: {
+          'x-access-token': token,
+        },
+      }),
+      axios.get(
+        `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getUserPosts?id=${id}`,
+        {
           headers: {
             'x-access-token': token,
           },
-        }),
-        axios.get(
-          `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getUserPosts?id=${id}`,
-          {
-            headers: {
-              'x-access-token': token,
-            },
-          }
-        ),
-      ])
-        .then(([user, posts]) => {
-          setProfile({
-            name: user.data.result.username,
-            posts: posts.data.result,
+        }
+      ),
+    ])
+      .then(([user, posts]) => {
+        setProfile({
+          name: user.data.result.username,
+          posts: posts.data.result,
+        })
+      })
+      .catch((err) => {
+        if (!err.auth) router.push('/login')
+        else
+          notifications.show({
+            title: 'Error',
+            message: err.message,
+            color: 'red',
           })
-        })
-        .catch((err) => {
-          if (!err.auth) router.push('/login')
-          else
-            notifications.show({
-              title: 'Error',
-              message: err.message,
-              color: 'red',
-            })
-        })
-    }
+      })
   }, [token])
 
   return (
@@ -70,8 +68,8 @@ export default function profile() {
         <Tabs.Panel value="All">
           <Grid>
             {profile.posts.map((el, i) => (
-              <Grid.Col span={12}>
-                <Card key={`card-${i}`} details={el} />
+              <Grid.Col span={12} key={`card-${i}`}>
+                <Card details={el} />
               </Grid.Col>
             ))}
           </Grid>

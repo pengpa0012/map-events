@@ -12,34 +12,33 @@ export default function profile() {
   const [profile, setProfile] = useState<any>({})
   const router = useRouter()
   useEffect(() => {
-    if (!token) {
-    } else
-      axios
-        .get(
-          `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=${router.query.profile}`,
-          {
-            headers: {
-              'x-access-token': token,
-            },
-          }
-        )
-        .then((data) => {
-          setProfile(data.data.result[0])
+    if (!token) return
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=${router.query.profile}`,
+        {
+          headers: {
+            'x-access-token': token,
+          },
+        }
+      )
+      .then((data) => {
+        setProfile(data.data.result[0])
+      })
+      .catch((err) => {
+        notifications.show({
+          title: 'Error',
+          message: err.message,
+          color: 'red',
         })
-        .catch((err) => {
-          notifications.show({
-            title: 'Error',
-            message: err.message,
-            color: 'red',
-          })
-        })
+      })
   }, [token])
   return (
     <Container className="pt-10 pb-20">
       <Carousel withIndicators height={500} loop withControls>
         {profile.images?.length > 0 ? (
-          profile.images?.map((el: any) => (
-            <Carousel.Slide>
+          profile.images?.map((el: any, i: number) => (
+            <Carousel.Slide key={`slide-${i}`}>
               <Image
                 src={el || 'https://via.placeholder.com/800x500'}
                 className="w-full h-full rounded-md"

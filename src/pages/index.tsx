@@ -14,32 +14,32 @@ export default function Home() {
   const [posts, setPosts] = useState([])
   const router = useRouter()
   useEffect(() => {
-    if (!token) {
-    } else
-      axios
-        .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
-          headers: {
-            'x-access-token': token,
-          },
-        })
-        .then((data) => {
-          setPosts(data.data.result)
-        })
-        .catch((err) => {
-          if (!err.auth) router.push('/login')
-          else
-            notifications.show({
-              title: 'Error',
-              message: err.message,
-              color: 'red',
-            })
-        })
+    if (!token) return
+    axios
+      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
+        headers: {
+          'x-access-token': token,
+        },
+      })
+      .then((data) => {
+        setPosts(data.data.result)
+      })
+      .catch((err) => {
+        if (!err.auth) router.push('/login')
+        else
+          notifications.show({
+            title: 'Error',
+            message: err.message,
+            color: 'red',
+          })
+      })
   }, [token])
+
   const Feed = ({ array }: { array: any[] }) => (
     <Grid>
       {array.map((el, i) => (
-        <Grid.Col span={12}>
-          <Card key={`card-${i}`} details={el} />
+        <Grid.Col span={12} key={`card-${i}`}>
+          <Card details={el} />
         </Grid.Col>
       ))}
     </Grid>
