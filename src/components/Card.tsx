@@ -11,7 +11,7 @@ export default function Card({ details }: { details: any }) {
       padding="lg"
       radius="md"
       withBorder
-      className="min-w-[300px] flex-1"
+      className="min-w-[300px] max-w-[600px] mx-auto"
     >
       <MantineCard.Section>
         <Image

@@ -1,4 +1,4 @@
-import { Container, Group, Image, Tabs } from '@mantine/core'
+import { Container, Grid, Group, Image, Tabs } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import axios from 'axios'
@@ -60,7 +60,7 @@ export default function profile() {
           fit="cover"
           className="rounded-full max-w-[200px]"
         />
-        <h2 className="text-2xl font-bold">{profile.name}</h2>
+        <h2 className="text-3xl">{profile.name}</h2>
       </div>
       <Tabs defaultValue="All">
         <Tabs.List className="mb-10">
@@ -68,11 +68,13 @@ export default function profile() {
           {/* <Tabs.Tab value="Following">Profile Details</Tabs.Tab> */}
         </Tabs.List>
         <Tabs.Panel value="All">
-          <Group wrap="wrap" gap={30}>
+          <Grid>
             {profile.posts.map((el, i) => (
-              <Card key={`card-${i}`} details={el} />
+              <Grid.Col span={12}>
+                <Card key={`card-${i}`} details={el} />
+              </Grid.Col>
             ))}
-          </Group>
+          </Grid>
         </Tabs.Panel>
         <Tabs.Panel value="Following">
           <ul>

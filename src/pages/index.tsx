@@ -1,4 +1,4 @@
-import { Container, Group, Text, Tabs } from '@mantine/core'
+import { Container, Group, Text, Tabs, Grid } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { IconBan } from '@tabler/icons-react'
@@ -36,22 +36,24 @@ export default function Home() {
         })
   }, [token])
   const Feed = ({ array }: { array: any[] }) => (
-    <Group wrap="wrap" gap={30}>
+    <Grid>
       {array.map((el, i) => (
-        <Card key={`card-${i}`} details={el} />
+        <Grid.Col span={12}>
+          <Card key={`card-${i}`} details={el} />
+        </Grid.Col>
       ))}
-    </Group>
+    </Grid>
   )
 
   return (
     <Container className="py-20 px-4" size={1440}>
-      <Text className="text-2xl font-bold" mb={20}>
-        FEED
+      <Text className="text-3xl text-center" mb={50}>
+        Report Feed
       </Text>
-      <Tabs defaultValue="All">
+      {/* <Tabs defaultValue="All">
         <Tabs.List className="mb-10">
           <Tabs.Tab value="All">All</Tabs.Tab>
-          {/* <Tabs.Tab value="Following">Following</Tabs.Tab> */}
+          <Tabs.Tab value="Following">Following</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="All">
           {posts.length > 0 ? (
@@ -63,7 +65,7 @@ export default function Home() {
             </div>
           )}
         </Tabs.Panel>
-        {/* <Tabs.Panel value="Following">
+        <Tabs.Panel value="Following">
           {posts.length > 0 ? (
             <Feed array={posts} />
           ) : (
@@ -72,8 +74,16 @@ export default function Home() {
               <p className="text-2xl text-gray-400">No Data</p>
             </div>
           )}
-        </Tabs.Panel> */}
-      </Tabs>
+        </Tabs.Panel>
+      </Tabs> */}
+      {posts.length > 0 ? (
+        <Feed array={posts} />
+      ) : (
+        <div className="text-center flex flex-col items-center">
+          <IconBan size={48} strokeWidth={2} color={'gray'} />
+          <p className="text-2xl text-gray-400">No Data</p>
+        </div>
+      )}
     </Container>
   )
 }
