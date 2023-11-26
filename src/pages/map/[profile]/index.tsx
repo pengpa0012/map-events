@@ -12,7 +12,7 @@ export default function profile() {
   const [profile, setProfile] = useState<any>({})
   const router = useRouter()
   useEffect(() => {
-    if (!token) return
+    if (token) console.log('test', token)
     axios
       .get(
         `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getPost?id=${router.query.profile}`,
@@ -63,7 +63,7 @@ export default function profile() {
             <p>{dayjs(profile.date_created).format('MMMM DD, YYYY hh:mma')}</p>
           </div>
         </div>
-        <p className="text-lg py-2 text-gray-600 text-justify">
+        <p className="text-lg py-2 text-gray-600 text-justify break-words">
           {profile.description}
         </p>
         {/* <div className="mt-10">

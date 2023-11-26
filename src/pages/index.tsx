@@ -14,25 +14,25 @@ export default function Home() {
   const [posts, setPosts] = useState([])
   const router = useRouter()
   useEffect(() => {
-    if (!token) return
-    axios
-      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
-        headers: {
-          'x-access-token': token,
-        },
-      })
-      .then((data) => {
-        setPosts(data.data.result)
-      })
-      .catch((err) => {
-        if (!err.auth) router.push('/login')
-        else
-          notifications.show({
-            title: 'Error',
-            message: err.message,
-            color: 'red',
-          })
-      })
+    if (token)
+      axios
+        .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
+          headers: {
+            'x-access-token': token,
+          },
+        })
+        .then((data) => {
+          setPosts(data.data.result)
+        })
+        .catch((err) => {
+          if (!err.auth) router.push('/login')
+          else
+            notifications.show({
+              title: 'Error',
+              message: err.message,
+              color: 'red',
+            })
+        })
   }, [token])
 
   const Feed = ({ array }: { array: any[] }) => (

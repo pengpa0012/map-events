@@ -17,37 +17,37 @@ export default function profile() {
   const router = useRouter()
 
   useEffect(() => {
-    if (!token) return
-    Promise.all([
-      axios.get(`${process.env.NEXT_PUBLIC_ENDPOINT}/user/getUser?id=${id}`, {
-        headers: {
-          'x-access-token': token,
-        },
-      }),
-      axios.get(
-        `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getUserPosts?id=${id}`,
-        {
+    if (token)
+      Promise.all([
+        axios.get(`${process.env.NEXT_PUBLIC_ENDPOINT}/user/getUser?id=${id}`, {
           headers: {
             'x-access-token': token,
           },
-        }
-      ),
-    ])
-      .then(([user, posts]) => {
-        setProfile({
-          name: user.data.result.username,
-          posts: posts.data.result,
-        })
-      })
-      .catch((err) => {
-        if (!err.auth) router.push('/login')
-        else
-          notifications.show({
-            title: 'Error',
-            message: err.message,
-            color: 'red',
+        }),
+        axios.get(
+          `${process.env.NEXT_PUBLIC_ENDPOINT}/post/getUserPosts?id=${id}`,
+          {
+            headers: {
+              'x-access-token': token,
+            },
+          }
+        ),
+      ])
+        .then(([user, posts]) => {
+          setProfile({
+            name: user.data.result.username,
+            posts: posts.data.result,
           })
-      })
+        })
+        .catch((err) => {
+          if (!err.auth) router.push('/login')
+          else
+            notifications.show({
+              title: 'Error',
+              message: err.message,
+              color: 'red',
+            })
+        })
   }, [token])
 
   return (

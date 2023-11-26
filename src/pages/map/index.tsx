@@ -11,23 +11,23 @@ export default function map() {
   const [reports, setReports] = useState([])
   const router = useRouter()
   useEffect(() => {
-    if (!token) return
-    axios
-      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
-        headers: {
-          'x-access-token': token,
-        },
-      })
-      .then((data) => {
-        setReports(data.data.result)
-      })
-      .catch((err) => {
-        notifications.show({
-          title: 'Error',
-          message: err.message,
-          color: 'red',
+    if (token)
+      axios
+        .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/post/getAllPost`, {
+          headers: {
+            'x-access-token': token,
+          },
         })
-      })
+        .then((data) => {
+          setReports(data.data.result)
+        })
+        .catch((err) => {
+          notifications.show({
+            title: 'Error',
+            message: err.message,
+            color: 'red',
+          })
+        })
   }, [token])
   return <Map locations={reports} />
 }

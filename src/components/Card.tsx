@@ -27,7 +27,7 @@ export default function Card({ details }: { details: any }) {
           {dayjs(details.date_created).format('MMMM DD, YYYY hh:mma')}
         </Text>
       </Group>
-      <Text size="sm" c="dimmed" className="text-justify">
+      <Text size="sm" c="dimmed" className="text-justify break-words">
         {details.description}
       </Text>
       <Button
