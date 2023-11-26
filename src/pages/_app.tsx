@@ -8,6 +8,13 @@ import '@mantine/notifications/styles.css'
 import { useDisclosure, useLocalStorage } from '@mantine/hooks'
 import { useRouter } from 'next/router'
 import { Notifications } from '@mantine/notifications'
+import {
+  IconHome,
+  IconLogout,
+  IconMap,
+  IconReport,
+  IconUser,
+} from '@tabler/icons-react'
 
 export default function App({ Component, pageProps }: AppProps) {
   const [opened, { toggle }] = useDisclosure()
@@ -35,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
         ) : (
           <AppShell
             navbar={{
-              width: 250,
+              width: 200,
               breakpoint: 'sm',
               collapsed: { mobile: !opened },
             }}
@@ -47,31 +54,71 @@ export default function App({ Component, pageProps }: AppProps) {
               <h1 className="text-2xl">Map Events</h1>
               <div className="flex flex-col gap-5 w-full my-20">
                 <NavLink
-                  label="Feed"
-                  className="text-center"
+                  label={
+                    <div className="flex items-center justify-center gap-2">
+                      <IconHome
+                        size={20}
+                        color={router.pathname == '/' ? '#228be6' : '#000'}
+                      />
+                      Feed
+                    </div>
+                  }
                   active={router.pathname == '/'}
                   onClick={() => router.push('/')}
                 />
                 <NavLink
-                  label="Map"
+                  label={
+                    <div className="flex items-center justify-center gap-2">
+                      <IconMap
+                        size={20}
+                        color={router.pathname == '/map' ? '#228be6' : '#000'}
+                      />
+                      Map
+                    </div>
+                  }
                   className="text-center"
                   active={router.pathname == '/map'}
                   onClick={() => router.push('/map')}
                 />
                 <NavLink
-                  label="Profile"
+                  label={
+                    <div className="flex items-center justify-center gap-2">
+                      <IconUser
+                        size={20}
+                        color={
+                          router.pathname == '/profile' ? '#228be6' : '#000'
+                        }
+                      />
+                      Profile
+                    </div>
+                  }
                   className="text-center"
                   active={router.pathname == '/profile'}
                   onClick={() => router.push('/profile')}
                 />
                 <NavLink
-                  label="Report Event"
+                  label={
+                    <div className="flex items-center justify-center gap-2">
+                      <IconReport
+                        size={20}
+                        color={
+                          router.pathname == '/report' ? '#228be6' : '#000'
+                        }
+                      />
+                      Report Event
+                    </div>
+                  }
                   className="text-center"
                   active={router.pathname == '/report'}
                   onClick={() => router.push('/report')}
                 />
                 <NavLink
-                  label="Logout"
+                  label={
+                    <div className="flex items-center justify-center gap-2">
+                      <IconLogout size={20} />
+                      Logout
+                    </div>
+                  }
                   className="text-center"
                   onClick={onLogout}
                 />
