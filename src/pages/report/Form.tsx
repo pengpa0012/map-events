@@ -37,9 +37,26 @@ export default function Form() {
   })
 
   const onSubmit = (values: any) => {
-    let imagesUrl: any[] = []
     const { title, description, date_created } = values
-    if (images.length == 0 || selectedPosition?.lat == undefined) {
+    if (description.length < 200) {
+      notifications.show({
+        title: 'Error',
+        message: 'Add atleast 200 characters on description.',
+        color: 'red',
+      })
+      return
+    }
+
+    if (images.length == 0) {
+      notifications.show({
+        title: 'Error',
+        message: 'Add images',
+        color: 'red',
+      })
+      return
+    }
+
+    if (selectedPosition?.lat == undefined) {
       notifications.show({
         title: 'Error',
         message: 'Pin a location!',
@@ -49,13 +66,11 @@ export default function Form() {
     }
     setBtnLoading(true)
     Promise.all(
-      images.map((el) => {
+      images.map(async (el: File) => {
         const imageRef = ref(storage, `/reports/${el.name + v4()}`)
-        return uploadBytes(imageRef, el).then((snapshot) => {
-          return getDownloadURL(snapshot.ref).then((url) => {
-            return url
-          })
-        })
+        const snapshot = await uploadBytes(imageRef, el)
+        const url = await getDownloadURL(snapshot.ref)
+        return url
       })
     ).then((url) => {
       axios
