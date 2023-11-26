@@ -14,6 +14,26 @@ import { LatLng, LatLngTuple } from 'leaflet'
 import { useRouter } from 'next/router'
 import { useLocalStorage } from '@mantine/hooks'
 
+const LocationMarker = () => {
+  const map = useMapEvents({
+    click(e) {
+      map.setView(e.latlng)
+      setMarkerPosition(e.latlng)
+    },
+  })
+
+  const [markerPosition, setMarkerPosition] = useLocalStorage<LatLng>({
+    key: 'position',
+  })
+
+  useEffect(() => {
+    setMarkerPosition({} as LatLng)
+  }, [])
+
+  if (markerPosition?.lat == null) return
+  return <Marker position={[markerPosition.lat, markerPosition.lng]}></Marker>
+}
+
 export default function Map({
   report,
   locations,
@@ -23,25 +43,7 @@ export default function Map({
 }) {
   const position = [14.599, 120.98] as LatLngTuple
   const router = useRouter()
-  const [markerPosition, setMarkerPosition] = useLocalStorage<LatLng>({
-    key: 'position',
-  })
 
-  useEffect(() => {
-    setMarkerPosition({} as LatLng)
-  }, [])
-
-  const LocationMarker = () => {
-    const map = useMapEvents({
-      click(e) {
-        map.setView(e.latlng)
-        setMarkerPosition(e.latlng)
-      },
-    })
-    if (markerPosition?.lat == null) return
-    return <Marker position={[markerPosition.lat, markerPosition.lng]}></Marker>
-  }
-  console.log(locations)
   return (
     <MapContainer
       center={position}
